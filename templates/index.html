@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Keskustelu</title>
+</head>
+
+<body>
+  <h1>Oheislaitteiden arvostelut</h1>
+
+  <p>
+    <a href="/register">Luo tunnus</a> |
+    {% if session.user_id %}
+    <a href="/logout">Kirjaudu ulos</a>
+    {% else %}
+    <a href="/login">Kirjaudu sisään</a>
+    {% endif %}
+  </p>
+
+  <form action="/search" method="get">
+    <p>
+      Haku:
+      {% if query %}
+      <input type="text" name="query" value="{{ query }}" />
+      {% else %}
+      <input type="text" name="query" />
+      {% endif %}
+    </p>
+    <input type="submit" value="Hae" />
+  </form>
+
+  <hr />
+  {% for thread in threads %}
+  <p>
+    <a href="/thread/{{ thread.id }}#{{  message_id  }}">
+      {{ thread.title }}</a>
+    <br />
+    {{ thread.total }} viestiä, uusin {{ thread.last }}
+  </p>
+  <hr />
+  {% endfor %}
+
+  <p>
+    <a href="/new_thread">Uusi julkaisu</a>
+  </p>
+</body>
+
+</html>

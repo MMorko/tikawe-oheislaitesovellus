@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+  {% if session.user_id %}
+  <h2>Uusi julkaisu</h2>
+
+  <form action="/new_thread" method="post">
+    <p>
+      Otsikko:<br />
+      <input type="text" name="title" maxlength="100" required />
+    </p>
+    <p>
+      Sisältö:<br />
+      <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
+    </p>
+    <input type="submit" value="Lähetä" />
+  </form>
+  {% endif %}
