@@ -1,10 +1,6 @@
-import sqlite3
 from flask import Flask
-from flask import abort
-from flask import redirect, render_template, request, session
-from flask import make_response
-import secrets
-import math
+from flask import redirect, render_template, request, session, abort, make_response
+import math, secrets, sqlite3
 import config, forum, users
 from werkzeug.security import generate_password_hash
 import db
@@ -17,8 +13,13 @@ def require_login():
         abort(403)
 
 def check_csrf():
-    if request.form["csrf_token"] != session["csrf_token"]:
+    if "csrf_token" not in session or request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
+
+@app.before_request
+def create_csrf_token():
+    if "csrf_token" not in session:
+        session["csrf_token"] = secrets.token_hex(16)
 
 @app.route("/")
 @app.route("/<int:page>")
@@ -44,24 +45,27 @@ def show_thread(thread_id):
     messages = forum.get_messages(thread_id)
     return render_template("thread.html", thread=thread, messages=messages)
 
-@app.route("/new_thread", methods=["POST"])
+@app.route("/new_thread", methods=["GET", "POST"])
 def new_thread():
     require_login()
-    check_csrf()
 
+    if request.method == "GET":
+        return render_template("new_thread.html")
+
+    check_csrf()
     title = request.form["title"]
     content = request.form["content"]
-    user_id = session["user_id"]
-    if not title or not content or len(title) > 100 or len(content) > 5000:
+    if not title or len(title) > 100 or len(content) > 5000:
         abort(403)
+    user_id = session["user_id"]
 
     thread_id = forum.add_thread(title, content, user_id)
     return redirect("/thread/" + str(thread_id))
 
 @app.route("/new_message", methods=["POST"])
 def new_message():
-    require_login()
     check_csrf()
+    require_login()
     content = request.form["content"]
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
@@ -85,13 +89,13 @@ def edit_message(message_id):
         return render_template("edit.html", message=message)
 
     if request.method == "POST":
+        check_csrf()
         content = request.form["content"]
         forum.update_message(message["id"], content)
         return redirect("/thread/" + str(message["thread_id"]))
 
 @app.route("/remove/<int:message_id>", methods=["GET", "POST"])
 def remove_message(message_id):
-    check_csrf()
     message = forum.get_message(message_id)
     if not message:
         abort(404)
@@ -102,6 +106,7 @@ def remove_message(message_id):
         return render_template("remove.html", message=message)
 
     if request.method == "POST":
+        check_csrf()
         if "continue" in request.form:
             forum.remove_message(message["id"])
         return redirect("/thread/" + str(message["thread_id"]))
@@ -131,6 +136,7 @@ def create():
 def login():
     if request.method == "GET":
         return render_template("login.html")
+    
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -138,7 +144,7 @@ def login():
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
-            session["csrf:token"] = secrets.token_hex(16)
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return render_template("login.html", error="VIRHE: väärä tunnus tai salasana")
@@ -154,10 +160,6 @@ def search():
     results = forum.search(query) if query else []
     return render_template("search.html", query=query, results=results)
 
-@app.route("/new_thread")
-def post_thread():
-    return render_template("new_thread.html")
-
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
     user = users.get_user(user_id)
@@ -169,12 +171,12 @@ def show_user(user_id):
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
     require_login()
-    check_csrf()
 
     if request.method == "GET":
         return render_template("add_image.html")
 
     if request.method == "POST":
+        check_csrf()
         file = request.files["image"]
         if not file.filename.endswith(".jpg"):
             return "VIRHE: väärä tiedostomuoto"
@@ -197,3 +199,19 @@ def show_image(user_id):
     response.headers.set("Content-Type", "image/jpeg")
     return response
 
+@app.route("/remove_thread/<int:thread_id>", methods=["GET", "POST"])
+def remove_thread(thread_id):
+    thread = forum.get_thread(thread_id)
+    if not thread:
+        abort(404)
+    if thread["user_id"] != session["user_id"]:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("remove_thread.html", thread=thread)
+
+    # POST (confirmation)
+    check_csrf()
+    if "continue" in request.form:
+        forum.remove_thread(thread_id)
+    return redirect("/")

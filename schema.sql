@@ -8,7 +8,8 @@ CREATE TABLE users (
 CREATE TABLE threads (
     id INTEGER PRIMARY KEY,
     title TEXT,
-    user_id INTEGER REFERENCES users
+    user_id INTEGER REFERENCES users,
+    content TEXT
 );
 
 CREATE TABLE messages (

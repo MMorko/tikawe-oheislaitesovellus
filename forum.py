@@ -2,10 +2,10 @@ import db
 
 def get_threads(page, page_size):
     sql = """SELECT t.id, t.title, COUNT(m.id) total, MAX(m.sent_at) last
-             FROM threads t, messages m
-             WHERE t.id = m.thread_id
+             FROM threads t LEFT JOIN messages m
+             ON t.id = m.thread_id
              GROUP BY t.id
-             ORDER BY t.id DESC
+             ORDER BY COALESCE(MAX(m.sent_at), t.id) DESC
              LIMIT ? OFFSET ?"""
     limit = page_size
     offset = page_size * (page - 1)
@@ -13,7 +13,7 @@ def get_threads(page, page_size):
 
 
 def get_thread(thread_id):
-    sql = "SELECT id, title FROM threads WHERE id = ?"
+    sql = "SELECT id, title, content, user_id FROM threads WHERE id = ?"
     result = db.query(sql, [thread_id])
     return result[0] if result else None
 
@@ -30,14 +30,15 @@ def get_message(message_id):
     return result[0] if result else None
 
 def add_thread(title, content, user_id):
-    sql = "INSERT INTO threads (title, user_id) VALUES (?, ?)"
-    db.execute(sql, [title, user_id])
+    sql = "INSERT INTO threads (title, user_id, content) VALUES (?, ?, ?)"
+    db.execute(sql, [title, user_id, content])
     thread_id = db.last_insert_id()
-    add_message(content, user_id, thread_id)
     return thread_id
 
 def remove_thread(thread_id):
-    sql = """DELETE FROM thread WHERE id = ?"""
+    sql = """DELETE FROM messages WHERE thread_id = ?"""
+    db.execute(sql, [thread_id])
+    sql = """DELETE FROM threads WHERE id = ?"""
     db.execute(sql, [thread_id])
 
 def add_message(content, user_id, thread_id):
@@ -64,7 +65,6 @@ def search(query):
     return db.query(sql, ["%" + query + "%"])
 
 def thread_count():
-    sql = """SELECT COUNT(*)
-             FROM threads"""
+    sql = """SELECT COUNT(*) FROM threads"""
     result = db.query(sql)
     return result[0][0] if result else 0

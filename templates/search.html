@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <body>
+    <form action="/search" method="get">
+    <p>
+      Hakusana:
+      {% if query %}
+      <input type="text" name="query" value="{{ query }}" />
+      {% else %}
+      <input type="text" name="query" />
+      {% endif %}
+    </p>
+    <input type="submit" value="Hae" />
+  </form>
     {% if query %}
     <hr />
     <h2>Tulokset</h2>

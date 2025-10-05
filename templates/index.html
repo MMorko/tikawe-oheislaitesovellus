@@ -35,7 +35,12 @@
     <a href="/thread/{{ thread.id }}#{{  message_id  }}">
       {{ thread.title }}</a>
     <br />
-    {{ thread.total }} viestiä, uusin {{ thread.last }}
+    {{ thread.total }} kommenttia.
+    {% if thread.last %}
+      Uusin {{ thread.last }}
+    {% else %}
+    
+    {% endif %}
   </p>
   <hr />
   {% endfor %}

@@ -7,6 +7,7 @@
 
 <body>
   <form action="/result" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
       Anna viesti:
       <input type="text" name="message" />

@@ -7,6 +7,12 @@
 
 <body>
   <h1>{{ thread.title }}</h1>
+  <p> {{ thread.content }} </p>
+  {% if thread.user_id == session.user_id %}
+  <p>
+    <a href="/remove_thread/{{ thread.id }}">Poista</a>
+  </p>
+  {% endif %}
 
   <hr />
   {% for message in messages %}
@@ -28,12 +34,12 @@
 
   {% if session.user_id %}
   <form action="/new_message" method="post">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
       Kommentti:<br />
       <textarea name="content" rows="5" cols="40" maxlength="5000"></textarea>
     </p>
     <input type="hidden" name="thread_id" value="{{ thread.id }}" />
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token}}" />
     <input type="submit" value="Lähetä" />
   </form>
   <hr />
