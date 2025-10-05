@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head><title>Poista julkaisu</title></head>
+<body>
+  <h2>Haluatko varmasti poistaa julkaisun "{{ thread.title }}"?</h2>
+
+  <form method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <input type="submit" name="continue" value="Jatka" />
+    <input type="submit" name="cancel" value="Peruuta" />
+  </form>
+</body>
+
+</html>
