@@ -7,7 +7,7 @@
     <ul>
     {% for result in results %}
         <li>
-        <a href="/thread/{{ result.thread_id }}">
+        <a href="/thread/{{ result.thread_id }}#{{ result.message_id }}">
             {{ result.thread_title }}
         </a>
         <br />

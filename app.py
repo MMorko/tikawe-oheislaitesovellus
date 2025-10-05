@@ -2,6 +2,9 @@ import sqlite3
 from flask import Flask
 from flask import abort
 from flask import redirect, render_template, request, session
+from flask import make_response
+import secrets
+import math
 import config, forum, users
 from werkzeug.security import generate_password_hash
 import db
@@ -13,10 +16,25 @@ def require_login():
     if "user_id" not in session:
         abort(403)
 
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
+        abort(403)
+
 @app.route("/")
-def index():
-    threads = forum.get_threads()
-    return render_template("index.html", threads=threads)
+@app.route("/<int:page>")
+def index(page=1):
+    page_size = 10
+    thread_count = forum.thread_count()
+    page_count = math.ceil(thread_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/1")
+    if page > page_count:
+        return redirect("/" + str(page_count))
+
+    threads = forum.get_threads(page, page_size)
+    return render_template("index.html", page=page, page_count=page_count, threads=threads)
 
 @app.route("/thread/<int:thread_id>")
 def show_thread(thread_id):
@@ -29,6 +47,7 @@ def show_thread(thread_id):
 @app.route("/new_thread", methods=["POST"])
 def new_thread():
     require_login()
+    check_csrf()
 
     title = request.form["title"]
     content = request.form["content"]
@@ -42,7 +61,7 @@ def new_thread():
 @app.route("/new_message", methods=["POST"])
 def new_message():
     require_login()
-
+    check_csrf()
     content = request.form["content"]
     user_id = session["user_id"]
     thread_id = request.form["thread_id"]
@@ -72,6 +91,7 @@ def edit_message(message_id):
 
 @app.route("/remove/<int:message_id>", methods=["GET", "POST"])
 def remove_message(message_id):
+    check_csrf()
     message = forum.get_message(message_id)
     if not message:
         abort(404)
@@ -111,7 +131,6 @@ def create():
 def login():
     if request.method == "GET":
         return render_template("login.html")
-
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
@@ -119,6 +138,7 @@ def login():
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
+            session["csrf:token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return render_template("login.html", error="VIRHE: väärä tunnus tai salasana")
@@ -137,3 +157,43 @@ def search():
 @app.route("/new_thread")
 def post_thread():
     return render_template("new_thread.html")
+
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    user = users.get_user(user_id)
+    if not user:
+        abort(404)
+    messages = users.get_messages(user_id)
+    return render_template("user.html", user = user, messages=messages)
+
+@app.route("/add_image", methods=["GET", "POST"])
+def add_image():
+    require_login()
+    check_csrf()
+
+    if request.method == "GET":
+        return render_template("add_image.html")
+
+    if request.method == "POST":
+        file = request.files["image"]
+        if not file.filename.endswith(".jpg"):
+            return "VIRHE: väärä tiedostomuoto"
+
+        image = file.read()
+        if len(image) > 100 * 1024:
+            return "VIRHE: liian suuri kuva"
+
+        user_id = session["user_id"]
+        users.update_image(user_id, image)
+        return redirect("/user/" + str(user_id))
+
+@app.route("/image/<int:user_id>")
+def show_image(user_id):
+    image = users.get_image(user_id)
+    if not image:
+        abort(404)
+
+    response = make_response(bytes(image))
+    response.headers.set("Content-Type", "image/jpeg")
+    return response
+

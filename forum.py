@@ -1,12 +1,16 @@
 import db
 
-def get_threads():
+def get_threads(page, page_size):
     sql = """SELECT t.id, t.title, COUNT(m.id) total, MAX(m.sent_at) last
              FROM threads t, messages m
              WHERE t.id = m.thread_id
              GROUP BY t.id
-             ORDER BY t.id DESC"""
-    return db.query(sql)
+             ORDER BY t.id DESC
+             LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
+
 
 def get_thread(thread_id):
     sql = "SELECT id, title FROM threads WHERE id = ?"
@@ -32,6 +36,10 @@ def add_thread(title, content, user_id):
     add_message(content, user_id, thread_id)
     return thread_id
 
+def remove_thread(thread_id):
+    sql = """DELETE FROM thread WHERE id = ?"""
+    db.execute(sql, [thread_id])
+
 def add_message(content, user_id, thread_id):
     sql = """INSERT INTO messages (content, sent_at, user_id, thread_id) VALUES
              (?, datetime('now'), ?, ?)"""
@@ -54,3 +62,9 @@ def search(query):
              WHERE t.title LIKE ?
              ORDER BY t.id DESC"""
     return db.query(sql, ["%" + query + "%"])
+
+def thread_count():
+    sql = """SELECT COUNT(*)
+             FROM threads"""
+    result = db.query(sql)
+    return result[0][0] if result else 0
