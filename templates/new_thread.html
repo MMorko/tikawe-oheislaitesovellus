@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-  
-  <h2>Uusi julkaisu</h2>
+  <link rel="stylesheet" href="/static/main.css">
   </head>
   <body>
+    <div class="header">
+    <h2>Uusi julkaisu</h2>
+    </div>
+    <hr />
     {% if session.user_id %}
+
+  <div class="nav">
   <form action="/new_thread" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
@@ -26,12 +31,19 @@
       Hinta:<br />
       <input type="number" name="price" min="1" required />
     </p>
+    </div>
+    <div class="content">
     <p>
       Sisältö:<br />
       <textarea name="content" rows="5" cols="40" maxlength="5000" required></textarea>
     </p>
     <input type="submit" value="Lähetä" />
+    </div>
   </form>
   {% endif %}
   </body>
+  <hr />
+  <p>
+    <a href="/">Etusivulle</a>
+  </p>
 </html>

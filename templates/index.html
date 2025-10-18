@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
-
+  
 <head>
   <title>Keskustelu</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
+  <div class="header">
   <h1>Oheislaitteiden arvostelut</h1>
-
+  </div>
+  
+  <div class="nav">
   <p>
     <a href="/register">Luo tunnus</a> |
     {% if session.user_id %}
@@ -16,25 +20,26 @@
     <a href="/login">Kirjaudu sisään</a>
     {% endif %}
   </p>
-
+  
   <form action="/search" method="get">
-    <p>
       Haku:
       {% if query %}
       <input type="text" name="query" value="{{ query }}" />
       {% else %}
       <input type="text" name="query" />
       {% endif %}
-    </p>
     <input type="submit" value="Hae" />
   </form>
+  </div>
 
+  <div class="content">
   <hr />
   {% for thread in threads %}
+  <div class="thread">
   <p>
     <a href="/thread/{{ thread.id }}#{{  message_id  }}">
-      {{ thread.title }} | {{thread.rating}}/5 | {{thread.price}}€</thread></a>
-    <br />
+      {{ thread.title }}</thread></a><br>
+      <small> {{ thread.rating }}/5 | {{ thread.price }}€</small><br>
     {{ thread.total }} kommenttia.
     {% if thread.last %}
       Uusin {{ thread.last }}
@@ -43,12 +48,14 @@
     {% endif %}
   </p>
   <hr />
+  </div>
   {% endfor %}
   <p>
     <a href="/{{ page - 1 }}">&lt;&lt;</a>
     Sivu {{ page }}/{{ page_count }}
     <a href="/{{ page + 1 }}">&gt;&gt;</a>
   </p>
+  </div>
   <hr />
   <p>
     <a href="/new_thread">Uusi julkaisu</a>

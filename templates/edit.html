@@ -3,11 +3,16 @@
 
 <head>
   <title>Viestin muokkaus</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
+  <div class="header">
   <h1>Viestin muokkaus</h1>
+  </div>
+  <hr />
 
+  <div class="nav">
   <form action="/edit/{{ message.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
@@ -16,6 +21,8 @@
     </p>
     <input type="submit" value="Lähetä" />
   </form>
+  </div>
+  <hr />
 
     <p>
         <a href="/">Etusivulle</a>

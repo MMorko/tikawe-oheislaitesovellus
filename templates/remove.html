@@ -3,11 +3,16 @@
 
 <head>
   <title>Viestin poisto</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
+  <div class="header">
   <h1>Viestin poisto</h1>
+  </div>
+  <hr />
 
+  <div class="nav">
   <form action="/remove/{{ message.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
@@ -16,6 +21,8 @@
     <input type="submit" name="continue" value="Jatka" />
     <input type="submit" name="cancel" value="Peruuta" />
   </form>
+  </div>
+  <hr />
 
     <p>
         <a href="/">Etusivulle</a>

@@ -65,6 +65,8 @@ def remove_message(message_id):
 def search(query):
     sql = """SELECT t.id AS thread_id,
                     t.title AS thread_title,
+                    t.rating,
+                    t.price,
                     u.username
              FROM threads t
              JOIN users u ON u.id = t.user_id

@@ -1,5 +1,16 @@
 <!DOCTYPE html>
+
+<head>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+
 <body>
+  <div class="header">
+    <h1> Haku </h1>
+  </div>
+  <hr />
+
+  <div class="nav">
     <form action="/search" method="get">
     <p>
       Hakusana:
@@ -10,6 +21,10 @@
       {% endif %}
     </p>
     <input type="submit" value="Hae" />
+    </div>
+  
+  <div class="content">
+
   </form>
     {% if query %}
     <hr />
@@ -17,16 +32,26 @@
     
     <ul>
     {% for result in results %}
-        <li>
-        <a href="/thread/{{ result.thread_id }}#{{ result.message_id }}">
+      <div class="thread">
+        <p>
+          <a href="/thread/{{ result.thread_id }}">
             {{ result.thread_title }}
-        </a>
-        <br />
-        {{ result.username }} ({{ result.sent_at }})
-        </li>  
+          </a><br>
+
+          <small>{{ result.rating }}/5 | {{ result.price }}€</small><br>
+
+          {{ result.username }}
+          {% if result.sent_at %}
+            ({{ result.sent_at }})
+          {% endif %}
+        </p>
+      </div>
     {% endfor %}
     </ul>
     {% endif %}
+    <hr />
+    </div>
+    <hr />
 
     <p>
         <a href="/">Etusivulle</a>

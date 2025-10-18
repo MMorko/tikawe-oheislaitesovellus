@@ -3,9 +3,15 @@
 
 <head>
   <title>Rekisteröinti</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
+  <div class="header">
+    <h2> Luo käyttäjä </h2>
+  </div>
+  <hr />
+  <div class="nav">
     {% if error %}
         <p style="color: red;">{{error}}</p>
     {% endif %}
@@ -34,7 +40,8 @@
         <button type="submit">Go to Front Page</button>
       </form>
     {% endif %}
-
+    </div>
+    <hr />
     <p>
         <a href="/">Etusivulle</a>
     </p>

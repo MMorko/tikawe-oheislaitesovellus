@@ -1,7 +1,17 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+
+<body>
+  <div class="header">
   <h1>{{ user.username }}</h1>
+  </div>
+  <hr />
+
+  <div class="nav">
   {% if user.has_image %}
   <img src="/image/{{ user.id }}" />
   {% endif %}
@@ -20,6 +30,9 @@
     Viimeisin viesti lähetetty {{ messages[0].sent_at }}
   </p>
   {% endif %}
+  </div>
+  <div class="content">
+    <hr />
     <ul>
   {% for message in messages %}
     <li>
@@ -31,6 +44,9 @@
     </li>  
   {% endfor %}
   </ul>
+  <hr />
+  </div>
+  <hr />
 
   <p>
     <a href="/">Etusivulle</a>

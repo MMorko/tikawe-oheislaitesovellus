@@ -3,23 +3,30 @@
 
 <head>
   <title>{{ thread.title }}</title>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 
 <body>
+  <div class="header">
   <h1>{{ thread.title }}</h1>
-  <p> 
+  </div>
+  <hr />
+
+  <div class="nav">
+  <p>  
     <a href="/user/{{ thread.user_id}}">{{ thread.username }}</a><br>
     <small>Arvostelu: {{thread.rating}} /5| Hinta: {{thread.price}} €</small>
     
   </p>
-
   <p> {{ thread.content }} </p>
   {% if thread.user_id == session.user_id %}
   <p>
     <a href="/remove_thread/{{ thread.id }}">Poista</a>
   </p>
   {% endif %}
-
+  </div>
+  
+  <div class="content">
   <hr />
   {% for message in messages %}
   <p id="{{ message.id }}">
@@ -50,10 +57,12 @@
   </form>
   <hr />
   {% endif %}
+  </div>
+  <hr />
 
-  <p>
+  <footer class="footer">
     <a href="/">Etusivulle</a>
-  </p>
-</body>
+  </footer>
 
+</body>
 </html>
