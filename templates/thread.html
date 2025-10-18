@@ -7,6 +7,12 @@
 
 <body>
   <h1>{{ thread.title }}</h1>
+  <p> 
+    <a href="/user/{{ thread.user_id}}">{{ thread.username }}</a><br>
+    <small>Arvostelu: {{thread.rating}} /5| Hinta: {{thread.price}} €</small>
+    
+  </p>
+
   <p> {{ thread.content }} </p>
   {% if thread.user_id == session.user_id %}
   <p>

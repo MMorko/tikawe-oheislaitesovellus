@@ -55,11 +55,13 @@ def new_thread():
     check_csrf()
     title = request.form["title"]
     content = request.form["content"]
-    if not title or len(title) > 100 or len(content) > 5000:
+    rating = int(request.form["rating"])
+    price = float(request.form["price"])
+    if not title or len(title) > 100 or len(content) > 5000 or not rating or not price:
         abort(403)
     user_id = session["user_id"]
 
-    thread_id = forum.add_thread(title, content, user_id)
+    thread_id = forum.add_thread(title, content, user_id, rating, price)
     return redirect("/thread/" + str(thread_id))
 
 @app.route("/new_message", methods=["POST"])
@@ -166,7 +168,8 @@ def show_user(user_id):
     if not user:
         abort(404)
     messages = users.get_messages(user_id)
-    return render_template("user.html", user = user, messages=messages)
+    threads = users.get_threads(user_id)
+    return render_template("user.html", user = user, messages=messages, threads=threads)
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():

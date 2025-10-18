@@ -33,7 +33,7 @@
   {% for thread in threads %}
   <p>
     <a href="/thread/{{ thread.id }}#{{  message_id  }}">
-      {{ thread.title }}</a>
+      {{ thread.title }} | {{thread.rating}}/5 | {{thread.price}}€</thread></a>
     <br />
     {{ thread.total }} kommenttia.
     {% if thread.last %}

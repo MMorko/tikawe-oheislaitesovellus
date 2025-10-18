@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html>
-  {% if session.user_id %}
+  <head>
+  
   <h2>Uusi julkaisu</h2>
-
+  </head>
+  <body>
+    {% if session.user_id %}
   <form action="/new_thread" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
       Otsikko:<br />
       <input type="text" name="title" maxlength="100" required />
+    </p>
+    <p>
+      Arvosana /5:<br />
+      <select name="rating" required>
+        <option value="5">5</option>
+        <option value="4">4</option>
+        <option value="3">3</option>
+        <option value="2">2</option>
+        <option value="1">1</option>
+      </select>
+    </p>
+    <p>
+      Hinta:<br />
+      <input type="number" name="price" min="1" required />
     </p>
     <p>
       Sisältö:<br />
@@ -16,4 +33,5 @@
     <input type="submit" value="Lähetä" />
   </form>
   {% endif %}
+  </body>
 </html>

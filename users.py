@@ -48,3 +48,12 @@ def get_image(user_id):
         return None
     image = result[0]
     return image["image"]
+
+def get_threads(user_id):
+    sql = """SELECT t.id, 
+                    t.title,
+                    t.rating,
+                    t.price
+                FROM threads t
+                WHERE t.user_id = ?"""
+    return db.query(sql, [user_id])
