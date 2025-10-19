@@ -78,3 +78,7 @@ def thread_count():
     sql = """SELECT COUNT(*) FROM threads"""
     result = db.query(sql)
     return result[0][0] if result else 0
+
+def update_thread(thread_id, content):
+    sql = "UPDATE threads SET content = ? WHERE id = ?"
+    db.execute(sql, [content, thread_id])

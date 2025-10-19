@@ -218,3 +218,20 @@ def remove_thread(thread_id):
     if "continue" in request.form:
         forum.remove_thread(thread_id)
     return redirect("/")
+
+@app.route("/edit_thread/<int:thread_id>", methods=["GET", "POST"])
+def edit_thread(thread_id):
+    thread = forum.get_thread(thread_id)
+    if not thread:
+        abort(404)
+    if thread["user_id"] != session["user_id"]:
+        abort(403)
+
+    if request.method == "GET":
+        return render_template("edit_thread.html", thread=thread)
+
+    if request.method == "POST":
+        check_csrf()
+        content = request.form["content"]
+        forum.update_thread(thread["id"], content)
+        return redirect("/thread/" + str(thread_id))

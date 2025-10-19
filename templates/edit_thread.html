@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Julkaisun muokkaus</title>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+
+<body>
+  <div class="header">
+    <h1>Julkaisun muokkaus</h1>
+  </div>
+  <hr />
+
+  <div class="nav">
+    <form action="/edit_thread/{{ thread['id'] }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <p>
+            Viesti:<br />
+            <textarea name="content" rows="5" cols="40">{{ thread.content }}</textarea>
+        </p>
+        <input type="submit" value="Lähetä" />
+    </form>
+  </div>
+  <hr />
+
+    <p>
+        <a href="/">Etusivulle</a>
+    </p>
+</body>
+
+</html>

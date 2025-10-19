@@ -21,6 +21,7 @@
   <p> {{ thread.content }} </p>
   {% if thread.user_id == session.user_id %}
   <p>
+    <a href="/edit_thread/{{ thread['id'] }}">Muokkaa</a>
     <a href="/remove_thread/{{ thread.id }}">Poista</a>
   </p>
   {% endif %}
