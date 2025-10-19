@@ -8,32 +8,50 @@
 <body>
   <div class="header">
   <h1>{{ user.username }}</h1>
-  </div>
-  <hr />
-
-  <div class="nav">
-  {% if user.has_image %}
+    {% if user.has_image %}
   <img src="/image/{{ user.id }}" />
   {% endif %}
   {% if user.id == session.user_id and not user.has_image %}
   <a href="/add_image">Lisää kuva</a>
   {% endif %}
+  </div>
+  <hr />
+
+  <div class="nav">
+
+
   <p>
-    Käyttäjä on lähettänyt {{ messages | count }} viestiä
+    Käyttäjä on julkaissut {{ threads | count }} arvostelua ja {{ messages | count }} viestiä
+  </p>
+
+  <p>
+    {% if average %}
+      Arvostelujen keskiarvo on: {{ average }}
+    {% else %}
+      Käyttäjälle ei ole arvosteluja.
+    {% endif %}
   </p>
 
   {% if messages %}
   <p>
-    Ensimmäinen viesti lähetetty {{ messages[-1].sent_at }}
-  </p>
-  <p>
-    Viimeisin viesti lähetetty {{ messages[0].sent_at }}
+    Ensimmäinen viesti lähetetty {{ messages[-1].sent_at }} | Viimeisin viesti lähetetty {{ messages[0].sent_at }}
   </p>
   {% endif %}
   </div>
   <div class="content">
+  <hr />
+  <h2>Käyttäjän arvostelut</h2>
+  <ul>
+  {% for thread in threads %}
+    <li>
+      <a href="/thread/{{ thread.id }}">{{ thread.title }}</a><br />
+      <small>{{ thread.rating }}/5 | {{ thread.price }}€</small> 
+    </li>
+  {% endfor %}
+  </ul>
     <hr />
-    <ul>
+  <h2>Käyttäjän kommentit</h2>
+  <ul>
   {% for message in messages %}
     <li>
       <a href="/thread/{{ message.thread_id }}#{{ message.id }}">

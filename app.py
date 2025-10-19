@@ -173,7 +173,14 @@ def show_user(user_id):
         abort(404)
     messages = users.get_messages(user_id)
     threads = users.get_threads(user_id)
-    return render_template("user.html", user = user, messages=messages, threads=threads)
+
+    average = None
+    if threads:
+        ratings = [t["rating"] for t in threads if t["rating"] is not None]
+        if ratings:
+            average = sum(ratings) / len(ratings)
+
+    return render_template("user.html", user = user, messages=messages, threads=threads, average=average)
 
 @app.route("/add_image", methods=["GET", "POST"])
 def add_image():
