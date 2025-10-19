@@ -159,8 +159,12 @@ def logout():
 @app.route("/search")
 def search():
     query = request.args.get("query")
-    results = forum.search(query) if query else []
-    return render_template("search.html", query=query, results=results)
+    min_rating = request.args.get("min_rating")
+    max_price = request.args.get("max_price")
+
+    results = forum.search(query=query, min_rating=min_rating, max_price=max_price)
+
+    return render_template("search.html", query=query, min_rating=min_rating, max_price=max_price, results=results)
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):

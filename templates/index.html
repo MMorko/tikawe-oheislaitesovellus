@@ -24,10 +24,25 @@
   <form action="/search" method="get">
       Haku:
       {% if query %}
-      <input type="text" name="query" value="{{ query }}" />
+        <input type="text" name="query" value="{{ query }}" />
       {% else %}
-      <input type="text" name="query" />
+        <input type="text" name="query" />
       {% endif %}
+
+    Hinta (enintään):
+    {% if max_price %}
+      <input type="number" name="max_price" value="{{ max_price }}" step="1" min="0" />
+    {% else %}
+      <input type="number" name="max_price" step="1" min="0" />
+    {% endif %}
+
+    Arvosana /5 (vähintään):
+    {% if min_rating %}
+      <input type ="number" name="min_rating" value="{{ min_rating }}" step="1" min="0" max="5" />
+    {% else %}
+      <input type ="number" name="min_rating" step="1" min="0" max="5" />
+    {% endif %} 
+    
     <input type="submit" value="Hae" />
   </form>
   </div>

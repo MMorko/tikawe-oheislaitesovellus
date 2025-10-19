@@ -62,7 +62,7 @@ def remove_message(message_id):
     sql = "DELETE FROM messages WHERE id = ?"
     db.execute(sql, [message_id])
 
-def search(query):
+def search(query, min_rating, max_price):
     sql = """SELECT t.id AS thread_id,
                     t.title AS thread_title,
                     t.rating,
@@ -70,9 +70,23 @@ def search(query):
                     u.username
              FROM threads t
              JOIN users u ON u.id = t.user_id
-             WHERE t.title LIKE ?
-             ORDER BY t.id DESC"""
-    return db.query(sql, ["%" + query + "%"])
+             WHERE 1=1"""
+    params = []
+    
+    if query:
+        sql += " AND t.title LIKE ?"
+        params.append(f"%{query}%")
+
+    if min_rating:
+        sql += " AND t.rating >= ?"
+        params.append(min_rating)
+
+    if max_price:
+        sql += " AND t.price <= ?"
+        params.append(max_price)
+
+    sql += " ORDER BY t.id DESC"
+    return db.query(sql, params)
 
 def thread_count():
     sql = """SELECT COUNT(*) FROM threads"""
