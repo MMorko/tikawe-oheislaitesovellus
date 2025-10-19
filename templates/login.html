@@ -8,9 +8,10 @@
 
 <body>
     <div class="header">
-        <h2>Kirjaudu sisään</h2>
+    <h2>Kirjaudu sisään</h2>
     </div>
     <hr />
+
     <div class="nav">
     {% if error %}
         <p style="color: red;">{{error}}</p>
@@ -20,12 +21,12 @@
 
     <form action="/login" method="post">
         <p>
-        Tunnus: <br />
-        <input type="text" name="username" />
+            Tunnus: <br />
+            <input type="text" name="username" />
         </p>
         <p>
-        Salasana: <br />
-        <input type="password" name="password" />
+            Salasana: <br />
+            <input type="password" name="password" />
         </p>
         <input type="submit" value="Kirjaudu" />
     </form>

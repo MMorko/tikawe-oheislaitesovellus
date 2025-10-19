@@ -8,22 +8,19 @@
 <body>
   <div class="header">
   <h1>{{ user.username }}</h1>
-    {% if user.has_image %}
-  <img src="/image/{{ user.id }}" />
+  {% if user.has_image %}
+    <img src="/image/{{ user.id }}" />
   {% endif %}
   {% if user.id == session.user_id and not user.has_image %}
-  <a href="/add_image">Lisää kuva</a>
+    <a href="/add_image">Lisää kuva</a>
   {% endif %}
   </div>
   <hr />
 
   <div class="nav">
-
-
   <p>
     Käyttäjä on julkaissut {{ threads | count }} arvostelua ja {{ messages | count }} viestiä
   </p>
-
   <p>
     {% if average %}
       Arvostelujen keskiarvo on: {{ average }}
@@ -31,36 +28,35 @@
       Käyttäjälle ei ole arvosteluja.
     {% endif %}
   </p>
-
   {% if messages %}
-  <p>
-    Ensimmäinen viesti lähetetty {{ messages[-1].sent_at }} | Viimeisin viesti lähetetty {{ messages[0].sent_at }}
-  </p>
+    <p>
+      Ensimmäinen viesti lähetetty {{ messages[-1].sent_at }} | Viimeisin viesti lähetetty {{ messages[0].sent_at }}
+    </p>
   {% endif %}
   </div>
   <div class="content">
   <hr />
   <h2>Käyttäjän arvostelut</h2>
   <ul>
-  {% for thread in threads %}
-    <li>
-      <a href="/thread/{{ thread.id }}">{{ thread.title }}</a><br />
-      <small>{{ thread.rating }}/5 | {{ thread.price }}€</small> 
-    </li>
-  {% endfor %}
+    {% for thread in threads %}
+      <li>
+        <a href="/thread/{{ thread.id }}">{{ thread.title }}</a><br />
+        <small>{{ thread.rating }}/5 | {{ thread.price }}€</small> 
+      </li>
+    {% endfor %}
   </ul>
-    <hr />
+  <hr />
   <h2>Käyttäjän kommentit</h2>
   <ul>
-  {% for message in messages %}
-    <li>
-      <a href="/thread/{{ message.thread_id }}#{{ message.id }}">
-        {{ message.thread_title }}
-      </a>
-      <br />
-      ({{ message.sent_at }})
-    </li>  
-  {% endfor %}
+    {% for message in messages %}
+      <li>
+        <a href="/thread/{{ message.thread_id }}#{{ message.id }}">
+          {{ message.thread_title }}
+        </a>
+        <br />
+        ({{ message.sent_at }})
+      </li>  
+    {% endfor %}
   </ul>
   <hr />
   </div>

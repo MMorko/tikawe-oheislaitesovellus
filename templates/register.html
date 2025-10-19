@@ -11,27 +11,28 @@
     <h2> Luo käyttäjä </h2>
   </div>
   <hr />
+
   <div class="nav">
     {% if error %}
         <p style="color: red;">{{error}}</p>
     {% endif %}
 
     {% if not success%}
-    <form action="/create" method="post">
-        <p>
-        Tunnus: <br />
-        <input type="text" name="username" required />
-        </p>
-        <p>
-        Salasana: <br />
-        <input type="password" name="password1" />
-        </p>
-        <p>
-        Salasana uudestaan: <br />
-        <input type="password" name="password2" />
-        </p>
-        <input type="submit" value="Luo tunnus" />
-    </form>
+      <form action="/create" method="post">
+          <p>
+            Tunnus: <br />
+            <input type="text" name="username" required />
+          </p>
+          <p>
+            Salasana: <br />
+            <input type="password" name="password1" />
+          </p>
+          <p>
+            Salasana uudestaan: <br />
+            <input type="password" name="password2" />
+          </p>
+          <input type="submit" value="Luo tunnus" />
+      </form>
     {% endif %}
 
     {% if success %}
@@ -42,6 +43,7 @@
     {% endif %}
     </div>
     <hr />
+    
     <p>
         <a href="/">Etusivulle</a>
     </p>

@@ -14,11 +14,11 @@
   <div class="nav">
   <p>
     {% if session.user_id %}
-    <a href="/user/{{ session.user_id }}"> Käyttäjäsivu</a> |
-    <a href="/logout">Kirjaudu ulos </a>
+      <a href="/user/{{ session.user_id }}"> Käyttäjäsivu</a> |
+      <a href="/logout">Kirjaudu ulos </a>
     {% else %}
-    <a href="/register">Luo tunnus</a> |
-    <a href="/login">Kirjaudu sisään</a>
+      <a href="/register">Luo tunnus</a> |
+      <a href="/login">Kirjaudu sisään</a>
     {% endif %}
   </p>
   
@@ -51,20 +51,20 @@
   <div class="content">
   <hr />
   {% for thread in threads %}
-  <div class="thread">
-  <p>
-    <a href="/thread/{{ thread.id }}#{{  message_id  }}">
+    <div class="thread">
+    <p>
+      <a href="/thread/{{ thread.id }}#{{  message_id  }}">
       {{ thread.title }}</thread></a><br>
       <small> {{ thread.rating }}/5 | {{ thread.price }}€</small><br>
-    {{ thread.total }} kommenttia.
-    {% if thread.last %}
-      Uusin {{ thread.last }}
-    {% else %}
+      {{ thread.total }} kommenttia.
+      {% if thread.last %}
+        Uusin {{ thread.last }}
+      {% else %}
     
-    {% endif %}
-  </p>
-  <hr />
-  </div>
+      {% endif %}
+    </p>
+    <hr />
+    </div>
   {% endfor %}
   <p>
     <a href="/{{ page - 1 }}">&lt;&lt;</a>
@@ -73,6 +73,7 @@
   </p>
   </div>
   <hr />
+  
   <p>
     <a href="/new_thread">Uusi julkaisu</a>
   </p>

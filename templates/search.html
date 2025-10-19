@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 
 <head>
   <link rel="stylesheet" href="/static/main.css">
@@ -15,9 +16,9 @@
     <p>
       Hakusana:
       {% if query %}
-      <input type="text" name="query" value="{{ query }}" />
+        <input type="text" name="query" value="{{ query }}" />
       {% else %}
-      <input type="text" name="query" />
+        <input type="text" name="query" />
       {% endif %}
     </p>
     <input type="submit" value="Hae" />
@@ -27,8 +28,8 @@
 
   </form>
     {% if results %}
-    <hr />
-    <h2>Tulokset</h2>
+      <hr />
+      <h2>Tulokset</h2>
     
     <ul>
     {% for result in results %}
@@ -37,9 +38,7 @@
           <a href="/thread/{{ result.thread_id }}">
             {{ result.thread_title }}
           </a><br>
-
           <small>{{ result.rating }}/5 | {{ result.price }}€</small><br>
-
           {{ result.username }}
           {% if result.sent_at %}
             ({{ result.sent_at }})
@@ -53,7 +52,9 @@
     </div>
     <hr />
 
-    <p>
-        <a href="/">Etusivulle</a>
-    </p>
+  <p>
+      <a href="/">Etusivulle</a>
+  </p>
 </body>
+
+</html>

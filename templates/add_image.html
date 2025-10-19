@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <link rel="stylesheet" href="/static/main.css">
 </head>
+
 <body>
   <div class="header">
     <h1> Kuvan lisääminen </h1>
@@ -10,17 +12,20 @@
   <hr />
 
   <div class="nav">
- <form action="/add_image" method="post" enctype="multipart/form-data">
-  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+  <form action="/add_image" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <p>
       Kuva: <input type="file" name="image" accept=".jpg" />
     </p>
     <input type="submit" value="Lähetä" />
   </form>
-   </div>
+  </div>
+
   <hr />
-    <p>
+
+  <p>
     <a href="/">Etusivulle</a>
   </p>
 </body>
+
 </html> 

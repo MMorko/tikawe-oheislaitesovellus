@@ -15,55 +15,54 @@
   <div class="nav">
   <p>  
     <a href="/user/{{ thread.user_id}}">{{ thread.username }}</a><br>
-    <small>Arvostelu: {{thread.rating}} /5| Hinta: {{thread.price}} €</small>
-    
+    <small>Arvostelu: {{thread.rating}} /5| Hinta: {{thread.price}} €</small>   
   </p>
   <p> {{ thread.content }} </p>
   {% if thread.user_id == session.user_id %}
-  <p>
-    <a href="/edit_thread/{{ thread['id'] }}">Muokkaa</a>
-    <a href="/remove_thread/{{ thread.id }}">Poista</a>
-  </p>
+    <p>
+      <a href="/edit_thread/{{ thread['id'] }}">Muokkaa</a>
+      <a href="/remove_thread/{{ thread.id }}">Poista</a>
+    </p>
   {% endif %}
   </div>
   
   <div class="content">
   <hr />
   {% for message in messages %}
-  <p id="{{ message.id }}">
-    <a href="/user/{{ message.user_id }}">{{ message.username }}</a>
-    ({{ message.sent_at }}):
-  </p>
-  <p>
-    {{ message.content }}
-  </p>
-  {% if message.user_id == session.user_id %}
-  <p>
-    <a href="/edit/{{ message.id }}">Muokkaa</a> |
-    <a href="/remove/{{ message.id }}">Poista</a>
-  </p>
-  {% endif %}
-  <hr />
+    <p id="{{ message.id }}">
+      <a href="/user/{{ message.user_id }}">{{ message.username }}</a>
+      ({{ message.sent_at }}):
+    </p>
+    <p>
+      {{ message.content }}
+    </p>
+    {% if message.user_id == session.user_id %}
+      <p>
+        <a href="/edit/{{ message.id }}">Muokkaa</a> |
+        <a href="/remove/{{ message.id }}">Poista</a>
+      </p>
+    {% endif %}
+    <hr />
   {% endfor %}
 
   {% if session.user_id %}
-  <form action="/new_message" method="post">
-  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <p>
-      Kommentti:<br />
-      <textarea name="content" rows="5" cols="40" maxlength="5000"></textarea>
-    </p>
-    <input type="hidden" name="thread_id" value="{{ thread.id }}" />
-    <input type="submit" value="Lähetä" />
-  </form>
-  <hr />
+    <form action="/new_message" method="post">
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+      <p>
+        Kommentti:<br />
+        <textarea name="content" rows="5" cols="40" maxlength="5000"></textarea>
+      </p>
+      <input type="hidden" name="thread_id" value="{{ thread.id }}" />
+      <input type="submit" value="Lähetä" />
+    </form>
+    <hr />
   {% endif %}
   </div>
   <hr />
 
-  <footer class="footer">
+  <p>
     <a href="/">Etusivulle</a>
-  </footer>
-
+  </p>>
 </body>
+
 </html>
