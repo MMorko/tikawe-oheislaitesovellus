@@ -19,5 +19,5 @@ CREATE TABLE messages (
     content TEXT,
     sent_at TEXT,
     user_id INTEGER REFERENCES users,
-    thread_id INTEGER REFERENCES threads,
+    thread_id INTEGER REFERENCES threads
 );
